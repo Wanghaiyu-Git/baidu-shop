@@ -2,6 +2,7 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/baidu-shop-basics/baidu-shop-basic-eureka-server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/baidu-shop-basics/baidu-shop-basic-upload-server/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/baidu-shop-basics/baidu-shop-basic-zuul-server/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/baidu-shop-commoms/baidu-shop-common-core/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/baidu-shop-service-api/baidu-shop-service-api-xxx/src/main/java" charset="UTF-8" />

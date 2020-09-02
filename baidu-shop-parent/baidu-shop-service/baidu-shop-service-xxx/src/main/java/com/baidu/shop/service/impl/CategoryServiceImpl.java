@@ -39,6 +39,14 @@ public class CategoryServiceImpl extends BaseApiService implements CategoryServi
     }
 
     @Override
+    public Result<List<CategoryEntity>> getBybrand(Integer brandId) {
+        //通过品牌id查询品牌分类
+        List<CategoryEntity> byBrandId = categoryMapper.getByBrandId(brandId);
+
+        return this.setResultSuccess(byBrandId);
+    }
+
+    @Override
     @Transactional
     public Result<JSONObject> saveCategory(CategoryEntity categoryEntity) {
 
@@ -91,7 +99,6 @@ public class CategoryServiceImpl extends BaseApiService implements CategoryServi
             parentCategoryEntity.setIsParent(0);
             categoryMapper.updateByPrimaryKeySelective(parentCategoryEntity);
         }
-
 
         categoryMapper.deleteByPrimaryKey(id);
         return this.setResultSuccess();
