@@ -4,8 +4,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.baidu.shop.base.BaseApiService;
 import com.baidu.shop.base.Result;
 import com.baidu.shop.entity.CategoryEntity;
+import com.baidu.shop.entity.SpecGroupEntity;
 import com.baidu.shop.mapper.CategoryMapper;
+import com.baidu.shop.mapper.SpecGroupMapper;
 import com.baidu.shop.service.CategoryService;
+import com.baidu.shop.status.HTTPStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 import tk.mybatis.mapper.entity.Example;
@@ -26,6 +29,9 @@ public class CategoryServiceImpl extends BaseApiService implements CategoryServi
 
     @Resource
     private CategoryMapper categoryMapper;
+
+    @Resource
+    private SpecGroupMapper specGroupMapper;
 
     @Override
     public Result<List<CategoryEntity>> getCategoryByPid(Integer pid) {
@@ -55,7 +61,6 @@ public class CategoryServiceImpl extends BaseApiService implements CategoryServi
         parentCategoryEntity.setId(categoryEntity.getParentId());
         parentCategoryEntity.setIsParent(1);
         categoryMapper.updateByPrimaryKeySelective(parentCategoryEntity);
-
 
         categoryMapper.insertSelective(categoryEntity);
 
@@ -98,6 +103,15 @@ public class CategoryServiceImpl extends BaseApiService implements CategoryServi
             parentCategoryEntity.setId(categoryEntity.getParentId());
             parentCategoryEntity.setIsParent(0);
             categoryMapper.updateByPrimaryKeySelective(parentCategoryEntity);
+        }
+
+        Example example1 = new Example(SpecGroupEntity.class);
+
+        example1.createCriteria().andEqualTo("cid",id);
+
+        if (specGroupMapper.selectByExample(example1).size() > 0){
+
+            return this.setResultError("类目名称被绑定规格不能被删除");
         }
 
         categoryMapper.deleteByPrimaryKey(id);
