@@ -70,6 +70,12 @@ public class SpecGroupServiceImpl extends BaseApiService implements SpecGroupSer
     @Override
     public Result<JsonObject> specGroupDelete(Integer id) {
 
+        Example example = new Example(SpecParamEntity.class);
+
+        example.createCriteria().andEqualTo("groupId",id);
+
+        if (specParamMapper.selectByExample(example).size() > 0) return this.setResultError("规格组被绑定参数不能被删除");
+
         specGroupMapper.deleteByPrimaryKey(id);
 
         return this.setResultSuccess();
