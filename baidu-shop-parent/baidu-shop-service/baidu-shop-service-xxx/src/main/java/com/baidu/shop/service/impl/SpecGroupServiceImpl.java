@@ -4,12 +4,16 @@ import com.alibaba.fastjson.JSONObject;
 import com.baidu.shop.base.BaseApiService;
 import com.baidu.shop.base.Result;
 import com.baidu.shop.dto.SpecGroupDTO;
+import com.baidu.shop.dto.SpecParamDTO;
 import com.baidu.shop.entity.SpecGroupEntity;
+import com.baidu.shop.entity.SpecParamEntity;
 import com.baidu.shop.mapper.SpecGroupMapper;
+import com.baidu.shop.mapper.SpecParamMapper;
 import com.baidu.shop.service.SpecGroupService;
 import com.baidu.shop.utils.BaiDuBeanUtil;
 import com.baidu.shop.utils.ObjectUtil;
 import com.google.gson.JsonObject;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 import tk.mybatis.mapper.entity.Example;
 
@@ -29,6 +33,9 @@ public class SpecGroupServiceImpl extends BaseApiService implements SpecGroupSer
     @Resource
     private SpecGroupMapper specGroupMapper;
 
+    @Resource
+    private SpecParamMapper specParamMapper;
+
     @Override
     public Result<List<SpecGroupEntity>> specGropList(SpecGroupDTO specGroupDTO) {
 
@@ -41,6 +48,7 @@ public class SpecGroupServiceImpl extends BaseApiService implements SpecGroupSer
         return this.setResultSuccess(list);
     }
 
+    @Transactional
     @Override
     public Result<JSONObject> specGroupAdd(SpecGroupDTO specGroupDTO) {
 
@@ -49,6 +57,7 @@ public class SpecGroupServiceImpl extends BaseApiService implements SpecGroupSer
         return this.setResultSuccess();
     }
 
+    @Transactional
     @Override
     public Result<JSONObject> specGroupEdit(SpecGroupDTO specGroupDTO) {
 
@@ -57,10 +66,50 @@ public class SpecGroupServiceImpl extends BaseApiService implements SpecGroupSer
         return this.setResultSuccess();
     }
 
+    @Transactional
     @Override
     public Result<JsonObject> specGroupDelete(Integer id) {
 
         specGroupMapper.deleteByPrimaryKey(id);
+
+        return this.setResultSuccess();
+    }
+
+    @Override
+    public Result<List<SpecParamEntity>> specParamList(SpecParamDTO specParamDTO) {
+
+        if(ObjectUtil.isNull(specParamDTO.getGroupId())) return this.setResultError("规格组id不能为空");
+
+        Example example = new Example(SpecParamEntity.class);
+        example.createCriteria().andEqualTo("groupId",specParamDTO.getGroupId());
+        List<SpecParamEntity> list = specParamMapper.selectByExample(example);
+
+        return this.setResultSuccess(list);
+    }
+
+    @Transactional
+    @Override
+    public Result<JSONObject> specParamAdd(SpecParamDTO specParamDTO) {
+
+        specParamMapper.insertSelective(BaiDuBeanUtil.copyProperties(specParamDTO,SpecParamEntity.class));
+
+        return this.setResultSuccess();
+    }
+
+    @Transactional
+    @Override
+    public Result<JSONObject> specParamEdit(SpecParamDTO specParamDTO) {
+
+        specParamMapper.updateByPrimaryKeySelective(BaiDuBeanUtil.copyProperties(specParamDTO,SpecParamEntity.class));
+
+        return this.setResultSuccess();
+    }
+
+    @Transactional
+    @Override
+    public Result<JSONObject> specParamDelete(Integer id) {
+
+        specParamMapper.deleteByPrimaryKey(id);
 
         return this.setResultSuccess();
     }
