@@ -3,8 +3,11 @@ package com.baidu.shop.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.baidu.shop.base.BaseApiService;
 import com.baidu.shop.base.Result;
+import com.baidu.shop.entity.BrandEntity;
+import com.baidu.shop.entity.CategoryBrandEntity;
 import com.baidu.shop.entity.CategoryEntity;
 import com.baidu.shop.entity.SpecGroupEntity;
+import com.baidu.shop.mapper.CategoryBrandMapper;
 import com.baidu.shop.mapper.CategoryMapper;
 import com.baidu.shop.mapper.SpecGroupMapper;
 import com.baidu.shop.service.CategoryService;
@@ -32,6 +35,9 @@ public class CategoryServiceImpl extends BaseApiService implements CategoryServi
 
     @Resource
     private SpecGroupMapper specGroupMapper;
+
+    @Resource
+    private CategoryBrandMapper categoryBrandMapper;
 
     @Override
     public Result<List<CategoryEntity>> getCategoryByPid(Integer pid) {
@@ -82,14 +88,20 @@ public class CategoryServiceImpl extends BaseApiService implements CategoryServi
 
         //验证传入的id是否有效
         CategoryEntity categoryEntity = categoryMapper.selectByPrimaryKey(id);
-        if (null == categoryEntity) {
-            return this.setResultError("当前ID不存在");
-        }
+        if (null == categoryEntity) return this.setResultError("当前ID不存在");
 
         //判断当前删除的节点是否为父节点
-        if (categoryEntity.getIsParent() == 1) {
-            return this.setResultError("当前节点为父节点,不能被删除");
-        }
+        if (categoryEntity.getIsParent() == 1) return this.setResultError("当前节点为父节点,不能被删除");
+
+        //绑定规格不能被删除
+        Example example1 = new Example(SpecGroupEntity.class);
+        example1.createCriteria().andEqualTo("cid",id);
+        if (specGroupMapper.selectByExample(example1).size() > 0) return this.setResultError("类目名称被绑定规格不能被删除");
+
+        //绑定品牌不能删除
+        Example example2 = new Example(CategoryBrandEntity.class);
+        example2.createCriteria().andEqualTo("categoryId",id);
+        if(categoryBrandMapper.selectByExample(example2).size() > 0) return this.setResultError("该类目被品牌绑定不能被删除");
 
         //通过当前被删除的节点的parentid查询数据
         Example example = new Example(CategoryEntity.class);
@@ -105,18 +117,8 @@ public class CategoryServiceImpl extends BaseApiService implements CategoryServi
             categoryMapper.updateByPrimaryKeySelective(parentCategoryEntity);
         }
 
-        Example example1 = new Example(SpecGroupEntity.class);
-
-        example1.createCriteria().andEqualTo("cid",id);
-
-        if (specGroupMapper.selectByExample(example1).size() > 0){
-
-            return this.setResultError("类目名称被绑定规格不能被删除");
-        }
-
         categoryMapper.deleteByPrimaryKey(id);
         return this.setResultSuccess();
     }
-
 
 }
