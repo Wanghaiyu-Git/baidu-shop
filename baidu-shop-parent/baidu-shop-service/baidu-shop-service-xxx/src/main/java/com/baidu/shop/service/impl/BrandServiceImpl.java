@@ -10,6 +10,7 @@ import com.baidu.shop.mapper.BrandMapper;
 import com.baidu.shop.mapper.CategoryBrandMapper;
 import com.baidu.shop.service.BrandService;
 import com.baidu.shop.utils.BaiDuBeanUtil;
+import com.baidu.shop.utils.ObjectUtil;
 import com.baidu.shop.utils.PinYinUtil;
 import com.baidu.shop.utils.StringUtil;
 import com.github.pagehelper.PageHelper;
@@ -35,7 +36,6 @@ import java.util.stream.Collectors;
 @RestController
 public class BrandServiceImpl extends BaseApiService implements BrandService {
 
-
     @Resource
     private BrandMapper brandMapper;
 
@@ -46,20 +46,21 @@ public class BrandServiceImpl extends BaseApiService implements BrandService {
     public Result<PageInfo<BrandEntity>> getBrandInfo(BrandDTO brandDTO) {
 
         //分页
-        PageHelper.startPage(brandDTO.getPage(),brandDTO.getRows());
+        if(ObjectUtil.isNotNull(brandDTO.getPage()) && ObjectUtil.isNotNull(brandDTO.getRows()))
+            PageHelper.startPage(brandDTO.getPage(),brandDTO.getRows());
 
         //排序
         Example example = new Example(BrandEntity.class);
         if(!StringUtil.isEmpty(brandDTO.getOrder()))example.setOrderByClause(brandDTO.getOrderByClause());
 
+        if (ObjectUtil.isNotNull(brandDTO.getId())) example.createCriteria().andEqualTo("id",brandDTO.getId());
+
         //条件查询
         if(!StringUtil.isEmpty(brandDTO.getName())) example.createCriteria()
                 .andLike("name","%" + brandDTO.getName() + "%");
 
-        List<BrandEntity> list = brandMapper.selectByExample(example);
-
         //数据封装
-        PageInfo<BrandEntity> pageInfo = new PageInfo<>(list);
+        PageInfo<BrandEntity> pageInfo = new PageInfo<>(brandMapper.selectByExample(example));
 
         return this.setResultSuccess(pageInfo);
     }
@@ -171,7 +172,6 @@ public class BrandServiceImpl extends BaseApiService implements BrandService {
 
     private void insertCategoryBrand(BrandDTO brandDTO,BrandEntity brandEntity){
         if (brandDTO.getCategory().contains(",")){
-
             List<CategoryBrandEntity> categoryBrandEntities = Arrays.asList(brandDTO.getCategory().split(","))
                     .stream().map(cid ->{
                         CategoryBrandEntity entity = new CategoryBrandEntity();
@@ -185,7 +185,6 @@ public class BrandServiceImpl extends BaseApiService implements BrandService {
             CategoryBrandEntity categoryBrandEntity = new CategoryBrandEntity();
             categoryBrandEntity.setCategoryId(StringUtil.toInteger(brandDTO.getCategory()));
             categoryBrandEntity.setBrandId(brandEntity.getId());
-
             categoryBrandMapper.insertSelective(categoryBrandEntity);
         }
     }
