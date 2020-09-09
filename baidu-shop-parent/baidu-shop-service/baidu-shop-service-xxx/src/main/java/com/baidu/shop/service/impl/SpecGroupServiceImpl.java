@@ -71,9 +71,7 @@ public class SpecGroupServiceImpl extends BaseApiService implements SpecGroupSer
     public Result<JsonObject> specGroupDelete(Integer id) {
 
         Example example = new Example(SpecParamEntity.class);
-
         example.createCriteria().andEqualTo("groupId",id);
-
         if (specParamMapper.selectByExample(example).size() > 0) return this.setResultError("规格组被绑定参数不能被删除");
 
         specGroupMapper.deleteByPrimaryKey(id);
@@ -84,10 +82,15 @@ public class SpecGroupServiceImpl extends BaseApiService implements SpecGroupSer
     @Override
     public Result<List<SpecParamEntity>> specParamList(SpecParamDTO specParamDTO) {
 
-        if(ObjectUtil.isNull(specParamDTO.getGroupId())) return this.setResultError("规格组id不能为空");
+//        if(ObjectUtil.isNull(specParamDTO.getGroupId())) return this.setResultError("规格组id不能为空");
 
         Example example = new Example(SpecParamEntity.class);
-        example.createCriteria().andEqualTo("groupId",specParamDTO.getGroupId());
+
+        if(ObjectUtil.isNotNull(specParamDTO.getGroupId())) example.createCriteria()
+                .andEqualTo("groupId",specParamDTO.getGroupId());
+        if(ObjectUtil.isNotNull(specParamDTO.getCid())) example.createCriteria()
+                .andEqualTo("cid",specParamDTO.getCid());
+
         List<SpecParamEntity> list = specParamMapper.selectByExample(example);
 
         return this.setResultSuccess(list);
