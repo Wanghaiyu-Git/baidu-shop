@@ -19,6 +19,10 @@ import java.util.List;
 @Api(tags = "品牌管理接口")
 public interface BrandService {
 
+    @ApiOperation(value = "通过分类id获取品牌")
+    @GetMapping(value = "brand/getBrandByCategory")
+    Result<List<BrandEntity>> getBrandByCategory(Integer cid);
+
     @ApiOperation(value = "获取品牌信息")
     @GetMapping(value = "brand/getBrandInfo")
     Result<PageInfo<BrandEntity>> getBrandInfo(BrandDTO brandDTO);
