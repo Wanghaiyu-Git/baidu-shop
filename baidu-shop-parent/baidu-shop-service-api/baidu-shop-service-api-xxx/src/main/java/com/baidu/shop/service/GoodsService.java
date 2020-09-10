@@ -41,4 +41,9 @@ public interface GoodsService {
     @ApiOperation(value = "删除商品")
     @DeleteMapping(value = "goods/delete")
     Result<JSONObject> goodsDelete(Integer spuId);
+
+    @ApiOperation(value = "上架or下架商品")
+    @GetMapping(value = "goods/UpOrDown")
+    Result<JSONObject> goodsUpOrDown(Integer id,Integer saleable);
+
 }

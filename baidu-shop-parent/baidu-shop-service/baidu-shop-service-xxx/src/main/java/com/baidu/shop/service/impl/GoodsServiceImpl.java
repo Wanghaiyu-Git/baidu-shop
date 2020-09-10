@@ -99,7 +99,6 @@ public class GoodsServiceImpl extends BaseApiService implements GoodsService {
                 List<BrandEntity> list1 = data.getList();
                 if (!list1.isEmpty() && list1.size() == 1) spuDTO1.setBrandName(list1.get(0).getName());
             }
-
             return spuDTO1;
         }).collect(Collectors.toList());
 
@@ -182,6 +181,7 @@ public class GoodsServiceImpl extends BaseApiService implements GoodsService {
         return setResultSuccess();
     }
 
+    @Transactional
     @Override
     public Result<JSONObject> goodsDelete(Integer spuId) {
 
@@ -199,6 +199,15 @@ public class GoodsServiceImpl extends BaseApiService implements GoodsService {
             stockMapper.deleteByIdList(skuIdArr);
         }
 
+        return this.setResultSuccess();
+    }
+
+    @Override
+    public Result<JSONObject> goodsUpOrDown(Integer id,Integer saleable) {
+        SpuEntity spuEntity = new SpuEntity();
+        spuEntity.setId(id);
+        spuEntity.setSaleable(saleable);
+        goodsMapper.updateByPrimaryKeySelective(spuEntity);
         return this.setResultSuccess();
     }
 
@@ -226,4 +235,5 @@ public class GoodsServiceImpl extends BaseApiService implements GoodsService {
             stockMapper.insertSelective(stockEntity);
         });
     }
+
 }
