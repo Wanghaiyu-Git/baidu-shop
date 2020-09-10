@@ -3,12 +3,10 @@ package com.baidu.shop.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.baidu.shop.base.BaseApiService;
 import com.baidu.shop.base.Result;
-import com.baidu.shop.entity.BrandEntity;
-import com.baidu.shop.entity.CategoryBrandEntity;
-import com.baidu.shop.entity.CategoryEntity;
-import com.baidu.shop.entity.SpecGroupEntity;
+import com.baidu.shop.entity.*;
 import com.baidu.shop.mapper.CategoryBrandMapper;
 import com.baidu.shop.mapper.CategoryMapper;
+import com.baidu.shop.mapper.GoodsMapper;
 import com.baidu.shop.mapper.SpecGroupMapper;
 import com.baidu.shop.service.CategoryService;
 import com.baidu.shop.status.HTTPStatus;
@@ -35,6 +33,9 @@ public class CategoryServiceImpl extends BaseApiService implements CategoryServi
 
     @Resource
     private SpecGroupMapper specGroupMapper;
+
+    @Resource
+    private GoodsMapper spuMapper;
 
     @Resource
     private CategoryBrandMapper categoryBrandMapper;
@@ -92,6 +93,11 @@ public class CategoryServiceImpl extends BaseApiService implements CategoryServi
 
         //判断当前删除的节点是否为父节点
         if (categoryEntity.getIsParent() == 1) return this.setResultError("当前节点为父节点,不能被删除");
+
+        //绑定商品不能删除
+        Example example3 = new Example(SpuEntity.class);
+        example3.createCriteria().andEqualTo("cid3",id);
+        if(spuMapper.selectByExample(example3).size() > 0) return this.setResultError("被商品绑定不能被删除");
 
         //绑定规格不能被删除
         Example example1 = new Example(SpecGroupEntity.class);
