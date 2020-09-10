@@ -1,5 +1,6 @@
 package com.baidu.shop.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baidu.shop.base.BaseApiService;
 import com.baidu.shop.base.Result;
 import com.baidu.shop.dto.BrandDTO;
@@ -179,6 +180,33 @@ public class GoodsServiceImpl extends BaseApiService implements GoodsService {
         this.saveSkuAndStock(spuDTO.getSkus(),spuDTO.getId(),date);
 
         return setResultSuccess();
+    }
+
+    @Override
+    public Result<JSONObject> goodsDelete(Integer spuId) {
+
+        //删除spu
+        goodsMapper.deleteByPrimaryKey(spuId);
+        //删除spuDetail
+        spuDepailMapper.deleteByPrimaryKey(spuId);
+
+        //查询
+        List<Long> skuIdArr = this.getSkuIdArrBySpuId(spuId);
+        if(skuIdArr.size() > 0){//尽量加上判断避免全表数据被删除!!!!!!!!!!!!!!!
+            //删除skus
+            skuMapper.deleteByIdList(skuIdArr);
+            //删除stock,与修改时的逻辑一样,先查询出所有将要修改skuId然后批量删除
+            stockMapper.deleteByIdList(skuIdArr);
+        }
+
+        return this.setResultSuccess();
+    }
+
+    private List<Long> getSkuIdArrBySpuId(Integer spuId){
+        Example example = new Example(SkuEntity.class);
+        example.createCriteria().andEqualTo("spuId",spuId);
+        List<SkuEntity> skuEntities = skuMapper.selectByExample(example);
+        return skuEntities.stream().map(sku -> sku.getId()).collect(Collectors.toList());
     }
 
     //数据重复新增sku和stock提出来

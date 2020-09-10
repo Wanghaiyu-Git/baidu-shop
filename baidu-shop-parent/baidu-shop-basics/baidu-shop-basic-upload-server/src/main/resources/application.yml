@@ -10,7 +10,7 @@ eureka:
 
 fdfs:
   so-timeout: 1501
-  connect-timeout: 601
+  connect-timeout: 2000
   thumb-image: # 缩略图
     width: 60
     height: 60
