@@ -21,6 +21,6 @@ baidu:
   upload:
     path:
       windows: D:\\images
-      linux: /wanghaiyu/images
+      linux: /wanghaiyu/static/images
     img:
       host: http://119.45.207.135/

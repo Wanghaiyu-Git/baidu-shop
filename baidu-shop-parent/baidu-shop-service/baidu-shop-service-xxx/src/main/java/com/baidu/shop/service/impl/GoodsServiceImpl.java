@@ -60,48 +60,24 @@ public class GoodsServiceImpl extends BaseApiService implements GoodsService {
 
 
     @Override
-    public Result<PageInfo<SpuEntity>> spuList(SpuDTO spuDTO) {
+    public Result<List<SpuDTO>> spuList(SpuDTO spuDTO) {
 
-        //分页
-        if(ObjectUtil.isNotNull(spuDTO.getPage()) && ObjectUtil.isNotNull(spuDTO.getRows()))
-            PageHelper.startPage(spuDTO.getPage(),spuDTO.getRows());
-
-        //排序
         Example example = new Example(SpuEntity.class);
-        if(StringUtil.isNotEmpty(spuDTO.getOrder())) example.setOrderByClause(spuDTO.getOrderByClause());
 
-        //条件查询
-        if(StringUtil.isNotEmpty(spuDTO.getTitle()))
-            example.createCriteria().andLike("title","%"+spuDTO.getTitle()+"%");
-        if(StringUtil.isNotEmpty(spuDTO.getSaleable()) && spuDTO.getSaleable() != 2)
-            example.createCriteria().andEqualTo("saleable",spuDTO.getSaleable());
+        this.pagingAndSort(spuDTO,example);
+        this.conditionQuery(spuDTO,example);
 
         List<SpuEntity> list = goodsMapper.selectByExample(example);
-
         List<SpuDTO> spuDTOList = list.stream().map(spuEntity -> {
             SpuDTO spuDTO1 = BaiDuBeanUtil.copyProperties(spuEntity, SpuDTO.class);
-
             //显示分类
-            String categoryName = goodsMapper.getCategoryName(spuDTO1.getCid1(), spuDTO1.getCid2(), spuDTO1.getCid3());
-            spuDTO1.setCategoryName(categoryName);
-//            String categoryName = categoryMapper.selectByIdList(
-//                    Arrays.asList(spuDTO1.getCid1(), spuDTO1.getCid2(), spuDTO1.getCid3()))
-//                    .stream().map(category -> category.getName()).collect(Collectors.joining("/"));
-//            spuDTO1.setCategoryName(categoryName);
-
+            this.getCategory(spuDTO1);
             //显示品牌
-            BrandDTO brandDTO = new BrandDTO();
-            brandDTO.setId(spuEntity.getBrandId());
-            Result<PageInfo<BrandEntity>> brandInfo = brandService.getBrandInfo(brandDTO);
-
-            if (ObjectUtil.isNotNull(brandInfo)) {
-                PageInfo<BrandEntity> data = brandInfo.getData();
-                List<BrandEntity> list1 = data.getList();
-                if (!list1.isEmpty() && list1.size() == 1) spuDTO1.setBrandName(list1.get(0).getName());
-            }
+            this.getBrand(spuEntity,spuDTO1);
             return spuDTO1;
         }).collect(Collectors.toList());
 
+        //数据封装
         PageInfo<SpuEntity> pageInfo = new PageInfo<>(list);
 
         return this.setResult(HTTPStatus.OK,pageInfo.getTotal() + "",spuDTOList);
@@ -202,6 +178,7 @@ public class GoodsServiceImpl extends BaseApiService implements GoodsService {
         return this.setResultSuccess();
     }
 
+    @Transactional
     @Override
     public Result<JSONObject> goodsUpOrDown(Integer id,Integer saleable) {
         SpuEntity spuEntity = new SpuEntity();
@@ -211,6 +188,46 @@ public class GoodsServiceImpl extends BaseApiService implements GoodsService {
         return this.setResultSuccess();
     }
 
+    //分页排序
+    private void pagingAndSort(SpuDTO spuDTO,Example example){
+        if(ObjectUtil.isNotNull(spuDTO.getPage()) && ObjectUtil.isNotNull(spuDTO.getRows()))
+            PageHelper.startPage(spuDTO.getPage(),spuDTO.getRows());
+        if(StringUtil.isNotEmpty(spuDTO.getOrder())) example.setOrderByClause(spuDTO.getOrderByClause());
+    }
+
+    //条件查询
+    private void conditionQuery(SpuDTO spuDTO,Example example){
+        if(StringUtil.isNotEmpty(spuDTO.getTitle()))
+            example.createCriteria().andLike("title","%"+spuDTO.getTitle()+"%");
+        if(StringUtil.isNotEmpty(spuDTO.getSaleable()) && spuDTO.getSaleable() != 2)
+            example.createCriteria().andEqualTo("saleable",spuDTO.getSaleable());
+    }
+
+    //显示分类
+    private void getCategory(SpuDTO spuDTO1){
+        String categoryName = goodsMapper.getCategoryName(spuDTO1.getCid1(), spuDTO1.getCid2(), spuDTO1.getCid3());
+        spuDTO1.setCategoryName(categoryName);
+//            String categoryName = categoryMapper.selectByIdList(
+//                    Arrays.asList(spuDTO1.getCid1(), spuDTO1.getCid2(), spuDTO1.getCid3()))
+//                    .stream().map(category -> category.getName()).collect(Collectors.joining("/"));
+//            spuDTO1.setCategoryName(categoryName);
+    }
+
+    //显示品牌
+    private void getBrand(SpuEntity spuEntity,SpuDTO spuDTO1){
+        BrandDTO brandDTO = new BrandDTO();
+        brandDTO.setId(spuEntity.getBrandId());
+        Result<PageInfo<BrandEntity>> brandInfo = brandService.getBrandInfo(brandDTO);
+
+        if (ObjectUtil.isNotNull(brandInfo)) {
+            PageInfo<BrandEntity> data = brandInfo.getData();
+            List<BrandEntity> list1 = data.getList();
+            if (!list1.isEmpty() && list1.size() == 1) spuDTO1.setBrandName(list1.get(0).getName());
+        }
+
+    }
+
+    //通过Spu查询sku
     private List<Long> getSkuIdArrBySpuId(Integer spuId){
         Example example = new Example(SkuEntity.class);
         example.createCriteria().andEqualTo("spuId",spuId);

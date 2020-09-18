@@ -15,6 +15,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>baidu-shop-service-xxx</module>
+        <module>baidu-shop-service-search</module>
     </modules>
 
     <dependencies>
