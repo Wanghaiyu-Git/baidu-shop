@@ -33,5 +33,9 @@ public interface CategoryService {
     @ApiOperation(value = "删除分类")
     @DeleteMapping(value = "category/delete")
     Result<JSONObject> deleteCategory(Integer id);
+
+    @ApiOperation(value = "通过分类id集合查询分类数据")
+    @GetMapping(value = "get/categoryByIdList")
+    Result<List<CategoryEntity>> getCategoryByIdList(@RequestParam String cidsStr);
 }
 
