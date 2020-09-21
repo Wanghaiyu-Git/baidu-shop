@@ -7,12 +7,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="baidu-shop-service-api-search" />
-        <module name="baidu-shop-basic-upload-server" />
+        <module name="baidu-shop-common-core" />
         <module name="baidu-shop-service-api-xxx" />
         <module name="baidu-shop-basic-zuul-server" />
-        <module name="baidu-shop-common-core" />
-        <module name="baidu-shop-basic-eureka-server" />
         <module name="baidu-shop-service-search" />
+        <module name="baidu-shop-basic-eureka-server" />
+        <module name="baidu-shop-basic-upload-server" />
         <module name="baidu-shop-service-xxx" />
       </profile>
     </annotationProcessing>
