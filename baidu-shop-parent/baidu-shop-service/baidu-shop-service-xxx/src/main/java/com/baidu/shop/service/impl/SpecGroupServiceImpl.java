@@ -85,11 +85,20 @@ public class SpecGroupServiceImpl extends BaseApiService implements SpecGroupSer
 //        if(ObjectUtil.isNull(specParamDTO.getGroupId())) return this.setResultError("规格组id不能为空");
 
         Example example = new Example(SpecParamEntity.class);
+        Example.Criteria criteria = example.createCriteria();
 
-        if(ObjectUtil.isNotNull(specParamDTO.getGroupId())) example.createCriteria()
+        if(ObjectUtil.isNotNull(specParamDTO.getGroupId())) criteria
                 .andEqualTo("groupId",specParamDTO.getGroupId());
-        if(ObjectUtil.isNotNull(specParamDTO.getCid())) example.createCriteria()
+
+        if(ObjectUtil.isNotNull(specParamDTO.getCid())) criteria
                 .andEqualTo("cid",specParamDTO.getCid());
+
+        if (ObjectUtil.isNotNull(specParamDTO.getSearching())) criteria
+                .andEqualTo("searching",specParamDTO.getSearching());
+
+        if (ObjectUtil.isNotNull(specParamDTO.getGeneric())) criteria
+                .andEqualTo("generic",specParamDTO.getGeneric());
+
 
         List<SpecParamEntity> list = specParamMapper.selectByExample(example);
 

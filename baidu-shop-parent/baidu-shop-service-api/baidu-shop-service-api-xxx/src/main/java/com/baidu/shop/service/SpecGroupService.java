@@ -21,7 +21,7 @@ public interface SpecGroupService {
 
     @ApiOperation(value = "通过条件查询规格组")
     @GetMapping(value = "specGrop/list")
-    Result<List<SpecGroupEntity>> specGropList(SpecGroupDTO specGroupDTO);
+    Result<List<SpecGroupEntity>> specGropList(@SpringQueryMap SpecGroupDTO specGroupDTO);
 
     @ApiOperation(value = "增加规格组")
     @PostMapping(value = "specGrop/add")

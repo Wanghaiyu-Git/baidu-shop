@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="baidu-shop-service-template" />
         <module name="baidu-shop-service-api-search" />
         <module name="baidu-shop-common-core" />
         <module name="baidu-shop-service-api-xxx" />
@@ -30,6 +31,7 @@
       <module name="baidu-shop-service-api-search" options="-parameters" />
       <module name="baidu-shop-service-api-xxx" options="-parameters" />
       <module name="baidu-shop-service-search" options="-parameters" />
+      <module name="baidu-shop-service-template" options="-parameters" />
       <module name="baidu-shop-service-xxx" options="-parameters" />
     </option>
   </component>
