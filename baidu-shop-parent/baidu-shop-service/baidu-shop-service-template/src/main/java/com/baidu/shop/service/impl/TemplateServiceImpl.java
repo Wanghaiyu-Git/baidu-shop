@@ -1,5 +1,7 @@
 package com.baidu.shop.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
+import com.baidu.shop.base.BaseApiService;
 import com.baidu.shop.base.Result;
 import com.baidu.shop.dto.*;
 import com.baidu.shop.entity.*;
@@ -7,13 +9,20 @@ import com.baidu.shop.feign.BrandFeign;
 import com.baidu.shop.feign.CategoryFeign;
 import com.baidu.shop.feign.GoodsFeign;
 import com.baidu.shop.feign.SpecGroupFeign;
-import com.baidu.shop.service.PageService;
+import com.baidu.shop.service.TemplateService;
 import com.baidu.shop.utils.BaiDuBeanUtil;
 import com.github.pagehelper.PageInfo;
 import com.netflix.discovery.converters.Auto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.RestController;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -21,29 +30,79 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * @ClassName PageServiceImpl
+ * @ClassName TemplateServiceImpl
  * @Description: TODO
  * @Author wanghaiyu
- * @Date 2020/9/23
+ * @Date 2020/9/25
  * @Version V1.0
  **/
-//@Service
-public class PageServiceImpl implements PageService {
+@RestController
+public class TemplateServiceImpl extends BaseApiService implements TemplateService {
 
-//    @Autowired
+    @Autowired
     private GoodsFeign goodsFeign;
 
-//    @Autowired
+    @Autowired
     private BrandFeign brandFeign;
 
-//    @Autowired
+    @Autowired
     private SpecGroupFeign specGroupFeign;
 
-//    @Autowired
+    @Autowired
     private CategoryFeign categoryFeign;
 
-//    @Override
-    public Map<String, Object> getPageInfoBySpuId(Integer spuId) {
+    @Value(value = "${mrshop.static.html.path}")
+    private String staticHTMLPath;
+
+    @Autowired
+    private TemplateEngine templateEngine;
+
+
+    @Override
+    public Result<JSONObject> createStaticHTMLTemplate(Integer spuId) {
+
+        Map<String, Object> pageInfoBySpuId = this.getPageInfoBySpuId(spuId);
+
+        //创建模板引擎上下文
+        Context context = new Context();
+        //将所有准备的数据放到模板中
+        context.setVariables(pageInfoBySpuId);
+
+        //创建文件 param1:文件路径 param2:文件名称
+        File file = new File(staticHTMLPath, spuId + ".html");
+        //构建文件输出流
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter(file, "UTF-8");
+
+            //根据模板生成静态文件
+            //param1:模板名称 params2:模板上下文[上下文中包含了需要填充的数据],文件输出
+            templateEngine.process("item",context,writer);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } finally {
+            writer.close();
+        }
+        return this.setResultSuccess();
+    }
+
+    @Override
+    public Result<JSONObject> initStaticHTMLTemplate() {
+
+        Result<List<SpuDTO>> spuListResult = goodsFeign.spuList(new SpuDTO());
+        if (spuListResult.getCode() == 200) {
+            List<SpuDTO> spuDTOList = spuListResult.getData();
+            spuDTOList.stream().forEach(spuDTO -> {
+                createStaticHTMLTemplate(spuDTO.getId());
+            });
+        }
+        return this.setResultSuccess();
+    }
+
+
+    private Map<String, Object> getPageInfoBySpuId(Integer spuId) {
 
         Map<String, Object> map = new HashMap<>();
 
@@ -103,7 +162,6 @@ public class PageServiceImpl implements PageService {
                     specParamResult.getData().stream().forEach(spec -> specMap.put(spec.getId(),spec.getName()));
                     map.put("specMap",specMap);
                 }
-
 
                 //规格组参数组
                 SpecGroupDTO specGroupDTO = new SpecGroupDTO();

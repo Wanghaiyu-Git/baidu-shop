@@ -21,6 +21,11 @@ spring:
     # 是否启用缓存
     cache: false
 
+mrshop:
+  static:
+    html:
+      path: E:\static-html\item #生成的html文件存储的路径
+
 # eureka配置
 eureka:
   client:
