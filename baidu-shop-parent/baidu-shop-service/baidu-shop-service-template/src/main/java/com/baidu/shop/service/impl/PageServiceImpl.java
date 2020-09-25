@@ -92,33 +92,9 @@ public class PageServiceImpl implements PageService {
                     map.put("skuList",skuList);
                 }
 
-                //规格组参数组
-                SpecGroupDTO specGroupDTO = new SpecGroupDTO();
-                specGroupDTO.setCid(spuId);
-                Result<List<SpecGroupEntity>> specGropResult = specGroupFeign.specGropList(specGroupDTO);
-
-                if (specGropResult.getCode() == 200) {
-                    List<SpecGroupEntity> specGroupList = specGropResult.getData();
-                    List<SpecGroupEntity> groupParamList = specGroupList.stream().map(specGroup -> {
-
-                        SpecGroupEntity specGroupEntity = BaiDuBeanUtil.copyProperties(specGroup, SpecGroupEntity.class);
-
-                        SpecParamDTO specParamDTO = new SpecParamDTO();
-                        specParamDTO.setGroupId(specGroup.getId());
-                        specParamDTO.setGeneric(true);
-                        Result<List<SpecParamEntity>> specParamResult = specGroupFeign.specParamList(specParamDTO);
-                        if (specParamResult.getCode() == 200) {
-                            List<SpecParamEntity> specParamList = specParamResult.getData();
-                            map.put("specParamList", specParamList);
-                        }
-                        return specGroupEntity;
-                    }).collect(Collectors.toList());
-                    map.put("groupParamList",groupParamList);
-                }
-
                 //特有参数规格
                 SpecParamDTO specParamDTO = new SpecParamDTO();
-                specParamDTO.setCid(spuDTO.getCid3());
+                specParamDTO.setCid(spuInfo.getCid3());
                 specParamDTO.setGeneric(false);
                 Result<List<SpecParamEntity>> specParamResult = specGroupFeign.specParamList(specParamDTO);
                 if (specParamResult.getCode() == 200) {
@@ -126,6 +102,32 @@ public class PageServiceImpl implements PageService {
 
                     specParamResult.getData().stream().forEach(spec -> specMap.put(spec.getId(),spec.getName()));
                     map.put("specMap",specMap);
+                }
+
+
+                //规格组参数组
+                SpecGroupDTO specGroupDTO = new SpecGroupDTO();
+                specGroupDTO.setCid(spuInfo.getCid3());
+                Result<List<SpecGroupEntity>> specGropListResult = specGroupFeign.specGropList(specGroupDTO);
+                if (specGropListResult.getCode() == 200) {
+                    List<SpecGroupEntity> specGroupData = specGropListResult.getData();
+
+                    List<SpecGroupDTO> specGroupDTOList = specGroupData.stream().map(specGroupEntity -> {
+
+                        SpecGroupDTO specGroup = BaiDuBeanUtil.copyProperties(specGroupEntity, SpecGroupDTO.class);
+
+                        SpecParamDTO paramDTO = new SpecParamDTO();
+                        paramDTO.setGroupId(specGroupEntity.getId());
+                        paramDTO.setGeneric(true);
+
+                        Result<List<SpecParamEntity>> specParamListResult = specGroupFeign.specParamList(paramDTO);
+                        if (specParamListResult.getCode() == 200) {
+                            specGroup.setParamList(specParamListResult.getData());
+                        }
+                        return specGroup;
+                    }).collect(Collectors.toList());
+
+                    map.put("specGroupDTOList",specGroupDTOList);
                 }
             }
         }

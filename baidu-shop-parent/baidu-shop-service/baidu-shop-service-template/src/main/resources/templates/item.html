@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
@@ -424,52 +425,24 @@
                         <div class="clearfix"></div>
                         <div class="tab-content tab-wraped">
                             <div id="one" class="tab-pane active">
-                                <ul class="goods-intro-list unstyled" style="list-style: none;">
-                                    <li>分辨率：1920*1080(FHD)</li>
-                                    <li>后置摄像头：1200万像素</li>
-                                    <li>前置摄像头：500万像素</li>
-                                    <li>核 数：其他</li>
-                                    <li>频 率：以官网信息为准</li>
-                                    <li>品牌： Apple</li>
-                                    <li>商品名称：APPLEiPhone 6s Plus</li>
-                                    <li>商品编号：1861098</li>
-                                    <li>商品毛重：0.51kg</li>
-                                    <li>商品产地：中国大陆</li>
-                                    <li>热点：指纹识别，Apple Pay，金属机身，拍照神器</li>
-                                    <li>系统：苹果（IOS）</li>
-                                    <li>像素：1000-1600万</li>
-                                    <li>机身内存：64GB</li>
+                                <ul class="goods-intro-list unstyled"
+                                    style="list-style: none;"
+                                    v-for="(specGroup,index) in specGroupDTOList"
+                                    v-if="specGroup.paramList.length > 1"
+                                    :key="index">
+                                    <li v-for="(param,index) in specGroup.paramList" :key="index">{{ param.name }}:{{ genSpec[param.id] }}</li>
                                 </ul>
                                 <!--商品详情-->
                                 <div class="intro-detail" th:utext="${detailList.description}">
-<!--                                    <img src="/img/_/intro01.png" />-->
-<!--                                    <img src="/img/_/intro02.png" />-->
-<!--                                    <img src="/img/_/intro03.png" />-->
                                 </div>
                             </div>
                             <div id="two" class="tab-pane">
                                 <div class="Ptable">
-                                    <div class="Ptable-item">
-                                        <h3>主体</h3>
-                                        <dl>
-                                            <dt>品牌</dt><dd>华为（HUAWEI）</dd>
-                                            <dt>型号</dt><dd>CLT-AL00</dd>
-                                            <dt>入网型号</dt><dd>CLT-AL00</dd>
-                                            <dt>上市年份</dt><dd>2018年</dd>
-                                            <dt>上市月份</dt><dd>4月</dd>
-                                        </dl>
-                                    </div>
-                                    <div class="Ptable-item">
-                                        <h3>基本信息</h3>
-                                        <dl>
-                                            <dt>机身颜色</dt><dd>宝石蓝</dd>
-                                            <dt>机身长度（mm）</dt><dd>155.0 </dd>
-                                            <dt>机身宽度（mm）</dt><dd>73.9 </dd>
-                                            <dt>机身厚度（mm）</dt><dd>7.8</dd>
-                                            <dt>机身重量（g）</dt><dd>约180g（含电池）</dd>
-                                            <dt>输入方式</dt><dd>触控</dd>
-                                            <dt>运营商标志或内容</dt><dd>无</dd>
-                                            <dt>机身材质分类</dt><dd>玻璃后盖</dd>
+                                    <div class="Ptable-item" v-if="group.paramList.length > 0" v-for="(group,index) in specGroupDTOList" :key="index">
+                                        <h3>{{ group.name }}</h3>
+                                        <dl v-for="param in group.paramList">
+                                            <dt>{{ param.name }}</dt>
+                                            <dd>{{ genSpec[param.id] }}</dd>
                                         </dl>
                                     </div>
                                 </div>
@@ -629,8 +602,9 @@
     const specMap = /*[[${specMap}]]*/{};
     const skuList = /*[[${skuList}]]*/[];
     const detailList = /*[[${detailList}]]*/{};
-    const groupParamList = /*[[${groupParamList}}]]*/[];
-    const specParamList = /*[[${specParamList}}]]*/{};
+
+    const specGroupDTOList = /*[[${specGroupDTOList}]]*/[];
+    const genSpec = JSON.parse(/*[[${detailList.genericSpec}]]*/);
 
 
     let indexes = {};
@@ -643,8 +617,8 @@
         el:"#itemApp",
         data:{
             mrshop,
-            specParamList,
-            groupParamList,
+            genSpec,
+            specGroupDTOList,
             categoryList,
             specMap,
             specialSpec,
