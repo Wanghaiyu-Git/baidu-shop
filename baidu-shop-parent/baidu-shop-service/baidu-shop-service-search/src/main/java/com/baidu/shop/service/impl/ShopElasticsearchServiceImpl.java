@@ -20,6 +20,7 @@ import com.baidu.shop.utils.ESHighLightUtil;
 import com.baidu.shop.utils.JSONUtil;
 import com.baidu.shop.utils.StringUtil;
 import com.google.common.math.DoubleMath;
+import com.google.gson.JsonObject;
 import org.apache.commons.lang3.math.NumberUtils;
 import com.github.pagehelper.PageInfo;
 import com.netflix.discovery.converters.Auto;
@@ -68,6 +69,21 @@ public class ShopElasticsearchServiceImpl extends BaseApiService implements Shop
 
     @Autowired
     private BrandFeign brandFeign;
+
+    @Override
+    public Result<JsonObject> saveData(Integer spuId) {
+        //通过spuId查询数据
+        SpuDTO spuDTO = new SpuDTO();
+        spuDTO.setId(spuId);
+        List<GoodsDoc> goodsDocs = this.esGoodsInfo(spuDTO);
+        elasticsearchRestTemplate.save(goodsDocs.get(0));
+        return this.setResultSuccess();
+    }
+
+    @Override
+    public Result<JsonObject> deleteData(Integer spuId) {
+        return null;
+    }
 
     /**
      * ES搜索
@@ -130,7 +146,7 @@ public class ShopElasticsearchServiceImpl extends BaseApiService implements Shop
             indexOperations.createMapping();
         }
         //批量新增数据
-        List<GoodsDoc> goodsDocs = this.esGoodsInfo();
+        List<GoodsDoc> goodsDocs = this.esGoodsInfo(new SpuDTO());
         elasticsearchRestTemplate.save(goodsDocs);
         return this.setResultSuccess();
     }
@@ -279,9 +295,8 @@ public class ShopElasticsearchServiceImpl extends BaseApiService implements Shop
      * 获取mysql数据
      * @return
      */
-    private List<GoodsDoc> esGoodsInfo() {
+    private List<GoodsDoc> esGoodsInfo(SpuDTO spuDTO) {
 
-        SpuDTO spuDTO = new SpuDTO();
         //查询出来的数据是多个spu
         List<GoodsDoc> goodsDocs = new ArrayList<>();
         Result<List<SpuDTO>> pageInfoResult = goodsFeign.spuList(spuDTO);

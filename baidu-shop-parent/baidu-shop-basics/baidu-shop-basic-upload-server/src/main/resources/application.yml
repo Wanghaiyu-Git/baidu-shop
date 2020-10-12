@@ -1,5 +1,6 @@
 server:
-  port: 8200
+  port: 8900
+  #8200
 spring:
   application:
     name: upload-server

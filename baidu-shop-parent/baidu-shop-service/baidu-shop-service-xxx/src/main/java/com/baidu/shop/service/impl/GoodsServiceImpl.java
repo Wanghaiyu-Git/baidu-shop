@@ -3,6 +3,8 @@ package com.baidu.shop.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.baidu.shop.base.BaseApiService;
 import com.baidu.shop.base.Result;
+import com.baidu.shop.component.MrRabbitMQ;
+import com.baidu.shop.constant.MqMessageConstant;
 import com.baidu.shop.dto.BrandDTO;
 import com.baidu.shop.dto.SkuDTO;
 import com.baidu.shop.dto.SpuDTO;
@@ -58,6 +60,9 @@ public class GoodsServiceImpl extends BaseApiService implements GoodsService {
     @Resource
     private SkuMapper skuMapper;
 
+    @Resource
+    private MrRabbitMQ mrRabbitMQ;
+
 
     @Override
     public Result<List<SpuDTO>> spuList(SpuDTO spuDTO) {
@@ -107,6 +112,8 @@ public class GoodsServiceImpl extends BaseApiService implements GoodsService {
         //新增sku和stock
         this.saveSkuAndStock(spuDTO.getSkus(),spuId,date);
 
+        mrRabbitMQ.send(spuEntity.getId() + "", MqMessageConstant.SPU_ROUT_KEY_SAVE);
+
         return this.setResultSuccess();
     }
 
@@ -154,6 +161,9 @@ public class GoodsServiceImpl extends BaseApiService implements GoodsService {
         //新增新的sku和stock数据
         this.saveSkuAndStock(spuDTO.getSkus(),spuDTO.getId(),date);
 
+        //发送消息
+        mrRabbitMQ.send(spuEntity.getId() + "",MqMessageConstant.SPU_ROUT_KEY_SAVE);
+
         return setResultSuccess();
     }
 
@@ -174,6 +184,8 @@ public class GoodsServiceImpl extends BaseApiService implements GoodsService {
             //删除stock,与修改时的逻辑一样,先查询出所有将要修改skuId然后批量删除
             stockMapper.deleteByIdList(skuIdArr);
         }
+
+        mrRabbitMQ.send(spuId + "", MqMessageConstant.SPU_ROUT_KEY_DELETE);
 
         return this.setResultSuccess();
     }
