@@ -84,7 +84,17 @@
             <version>2.9.2</version>
         </dependency>
 
+        <!--螺丝帽短信验证码-->
+        <dependency>
+            <groupId>com.mrshop.luosimao</groupId>
+            <artifactId>jersey-bundle</artifactId>
+            <version>1.0.0</version>
+        </dependency>
 
-
+        <dependency>
+            <groupId>com.mrshop.luosimao</groupId>
+            <artifactId>json-org</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 </project>

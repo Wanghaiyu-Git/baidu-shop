@@ -17,6 +17,7 @@
         <module>baidu-shop-service-api-xxx</module>
         <module>baidu-shop-service-api-search</module>
         <module>baidu-shop-service-api-template</module>
+        <module>baidu-shop-service-api-user</module>
     </modules>
 
     <dependencies>
