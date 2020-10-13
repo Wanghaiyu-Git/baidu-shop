@@ -82,7 +82,12 @@ public class ShopElasticsearchServiceImpl extends BaseApiService implements Shop
 
     @Override
     public Result<JsonObject> deleteData(Integer spuId) {
-        return null;
+
+        GoodsDoc goodsDoc = new GoodsDoc();
+        goodsDoc.setId(spuId.longValue());
+        elasticsearchRestTemplate.delete(goodsDoc);
+
+        return this.setResultSuccess();
     }
 
     /**

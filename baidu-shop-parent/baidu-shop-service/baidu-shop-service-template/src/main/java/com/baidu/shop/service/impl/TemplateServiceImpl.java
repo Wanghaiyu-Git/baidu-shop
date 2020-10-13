@@ -57,6 +57,14 @@ public class TemplateServiceImpl extends BaseApiService implements TemplateServi
     @Autowired
     private TemplateEngine templateEngine;
 
+    @Override
+    public Result<JSONObject> deleteHTMLBySpuId(Integer spuId) {
+        File file = new File(staticHTMLPath + File.separator + spuId + ".html");
+        if (file.delete()) {
+            return this.setResultError("文件删除失败");
+        }
+        return this.setResultSuccess();
+    }
 
     @Override
     public Result<JSONObject> createStaticHTMLTemplate(Integer spuId) {

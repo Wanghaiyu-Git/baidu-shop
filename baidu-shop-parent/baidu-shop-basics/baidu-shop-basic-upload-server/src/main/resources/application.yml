@@ -1,5 +1,5 @@
 server:
-  port: 8900
+  port: 8200
   #8200
 spring:
   application:
@@ -16,7 +16,7 @@ fdfs:
     width: 60
     height: 60
   tracker-list: # tracker地址
-    - 119.45.207.135:22122
+    - 119.45.191.248:22122
 
 baidu:
   upload:
