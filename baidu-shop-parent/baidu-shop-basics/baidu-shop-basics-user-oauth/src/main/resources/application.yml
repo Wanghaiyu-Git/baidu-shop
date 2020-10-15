@@ -1,8 +1,9 @@
 server:
-  port: 8500
+  port: 8600
 
 spring:
-  # 整合redis配置
+  application:
+    name: oauth-server
   redis:
     # 数据库标识，可以配置多个redis使用不同的标识区分
     database: 0
@@ -23,8 +24,6 @@ spring:
         max-wait: -1ms
         #最小等待连接中的数量,设 0 为没有限制
         min-idle: 0
-  application:
-    name: user-server
   datasource:
     # 数据源名称，任意
     name: mysql
@@ -52,6 +51,7 @@ spring:
       validation-timeout: 5000
       # 设置连接在连接池中的存货时间 如果不等于0且小于30秒则会被重置回30分钟
       max-lifetime: 1800000
+
 # 通用mapper
 mapper:
   mappers: tk.mybatis.mapper.common.Mapper
@@ -61,6 +61,7 @@ logging:
   level:
     # 打印与我们程序相关的日志信息
     com.baidu.shop: debug
+
 # eureka配置
 eureka:
   client:

@@ -16,4 +16,6 @@ public class HTTPStatus {
 
     public  static  final int PARAMS_VALIDATE_ERROR = 5002;//参数效验失败
 
+    public  static  final int VALID_CODE_ERROR = 5003;//短信效验失败
+
 }

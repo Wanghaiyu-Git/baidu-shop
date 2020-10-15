@@ -3,16 +3,20 @@ package com.baidu.shop.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.baidu.shop.base.BaseApiService;
 import com.baidu.shop.base.Result;
+import com.baidu.shop.constant.MRshopConstant;
 import com.baidu.shop.constant.UserConstant;
 import com.baidu.shop.dto.UserDTO;
 import com.baidu.shop.entity.UserEntity;
 import com.baidu.shop.mapper.UserMapper;
+import com.baidu.shop.redis.repository.RedisRepository;
 import com.baidu.shop.service.UserService;
+import com.baidu.shop.status.HTTPStatus;
 import com.baidu.shop.utils.BCryptUtil;
 import com.baidu.shop.utils.BaiDuBeanUtil;
 import com.baidu.shop.utils.LuosimaoDuanxinUtil;
 import com.baidu.shop.validate.grop.BaiDuOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 import tk.mybatis.mapper.entity.Example;
 
@@ -33,6 +37,9 @@ public class UserServiceImpl extends BaseApiService implements UserService {
 
     @Resource
     private UserMapper userMapper;
+
+    @Autowired
+    private RedisRepository redisRepository;
 
     /**
      * 注册账户
@@ -88,6 +95,17 @@ public class UserServiceImpl extends BaseApiService implements UserService {
 
         //发送语音验证
 //        LuosimaoDuanxinUtil.sendSpeak(userDTO.getPhone(),code);
+        redisRepository.set(MRshopConstant.USER_PHONE_CODE_PRE + userDTO.getPhone(),code);
+        redisRepository.expire(MRshopConstant.USER_PHONE_CODE_PRE + userDTO.getPhone(),120);
+
+        return this.setResultSuccess();
+    }
+
+    @Override
+    public Result<JSONObject> checkValidCode(String phone, String code) {
+
+        String s = redisRepository.get(MRshopConstant.USER_PHONE_CODE_PRE + phone);
+        if (!code.equals(s)) return this.setResultError(HTTPStatus.VALID_CODE_ERROR,"验证码输入错误");
 
         return this.setResultSuccess();
     }
