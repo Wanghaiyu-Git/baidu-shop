@@ -18,4 +18,8 @@ public class HTTPStatus {
 
     public  static  final int VALID_CODE_ERROR = 5003;//短信效验失败
 
+    public  static  final int VALID_USER_PASSWORD_ERROR = 5004;//用户账号或密码错误
+
+    public  static  final int VERIFY_ERROR = 403;//用户失效
+
 }

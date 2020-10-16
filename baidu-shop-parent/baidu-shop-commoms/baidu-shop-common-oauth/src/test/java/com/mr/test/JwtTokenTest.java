@@ -41,7 +41,7 @@ public class JwtTokenTest {
      * 从文件中读取公钥私钥
      * @throws Exception
      */
-//    @Before
+    @Before
     public void getKeyByRsa() throws Exception {
         this.publicKey = RsaUtils.getPublicKey(pubKeyPath);
         this.privateKey = RsaUtils.getPrivateKey(priKeyPath);
@@ -65,7 +65,7 @@ public class JwtTokenTest {
      */
     @Test
     public void parseToken() throws Exception {
-        String token = "eyJhbGciOiJSUzI1NiJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ6aGFvanVuaGFvIiwiZXhwIjoxNjAyMjUxMDA5fQ.VDCze7zIeYi2FKl7nY985vxHaRB5oARnjFiJM37Q26ohxmCgeqFvZvRaDy_6gx7HGI5CpIb19tfA0-mqTSZVVdjeqZrhbus3z72bIOY1re8j7CKvix5e6wYkm5qmuEkZ_tk9KFgKe4omzVKbnQS8k0eRAk123L_JfUo5gCgOqxQ";
+        String token = "eyJhbGciOiJSUzI1NiJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ3aHkiLCJleHAiOjE2MDI3NDQ3MTB9.hZ7J_RtMEoO65rw1fl0X0y9Q2e45ZR_0hk2v9wkVYYW9pxZuKyoJyi6VK7qP3QqYtW_o_5LHQaix_gaLMcVpC7bCEt52gw1yidKZDt6ToCbKZSGZWQBcZ0BmWW3AW5ncv5t2E6-b48cGDqchvQc0NKUcZQk01l0bccXuoBZxtoY";
 
         // 解析token
         UserInfo user = JwtUtils.getInfoFromToken(token, publicKey);

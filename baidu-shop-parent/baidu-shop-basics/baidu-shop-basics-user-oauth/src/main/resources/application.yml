@@ -67,3 +67,12 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
+
+baidushop:
+  jwt:
+    secret: why # 登录校验的密钥
+    pubKeyPath: E:\rea\rea.pub # 公钥地址,理论上应该有对应linux的地址
+    priKeyPath: E:\rea\rea.pri # 私钥地址
+    expire: 30 # tocken有效时间,单位分钟
+    cookieName: MRSHOP_TOKEN #cookie名称
+    cookieMaxAge: 1800 #cookie有效时间，单位为秒

@@ -17,6 +17,7 @@ import com.baidu.shop.utils.LuosimaoDuanxinUtil;
 import com.baidu.shop.validate.grop.BaiDuOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.RestController;
 import tk.mybatis.mapper.entity.Example;
 
