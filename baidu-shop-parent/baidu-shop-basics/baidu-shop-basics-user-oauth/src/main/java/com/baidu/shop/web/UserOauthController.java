@@ -65,6 +65,13 @@ public class UserOauthController extends BaseApiService {
 
         try {
             UserInfo userInfo = JwtUtils.getInfoFromToken(token, jwtConfig.getPublicKey());
+
+            //可以解析token的证明用户是正确登录状态,重新生成token
+            String newToken = JwtUtils.generateToken(userInfo, jwtConfig.getPrivateKey(), jwtConfig.getExpire());
+
+            //将新的token写入cookie,过期时间延长
+            CookieUtils.setCookie(request,response,jwtConfig.getCookieName(),newToken,jwtConfig.getCookieMaxAge(),true);
+
             return this.setResultSuccess(userInfo);
         } catch (Exception e) {//如果有异常 说明token有问题
             //e.printStackTrace();
