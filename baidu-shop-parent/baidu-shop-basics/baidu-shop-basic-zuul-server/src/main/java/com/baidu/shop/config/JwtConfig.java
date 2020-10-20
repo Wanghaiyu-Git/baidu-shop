@@ -1,4 +1,4 @@
-package com.baidu.config;
+package com.baidu.shop.config;
 
 import com.baidu.shop.utils.RsaUtils;
 import lombok.Data;

@@ -634,26 +634,38 @@
                 if(this.num > 1) this.num--;
             },
             addCar(){
-                let carList = mrshop.store.get("carList") || [];
-                let car = carList.find(car => car.skuId == this.sku.id);
-
-                if(car){
-                    if(this.num < this.sku.stock){
-                        car.num += this.num;
-                    }
-                }else{
-                    car = {
+                mrshop.checkUserLogin().then(resp => {
+                    mrshop.http.post('car/car/addCar',{
                         skuId:this.sku.id,
-                        title:this.sku.title,
-                        image:this.sku.images[0],
-                        price:this.sku.price,
                         num:this.num,
-                        ownSpec:JSON.stringify(this.ownSpec)
-                    };
-                    carList.push(car);
-                }
-                mrshop.store.set("carList",carList);
-                window.location.href = '../success-cart.html';
+                    }).then(resp => {
+                        if(resp.data.code == 200){
+                            window.location.href = '../success-cart.html';
+                        }
+                    }).catch(error => console.log(error))
+                }).catch(() => {
+                    //校验用户是否登录
+                    let carList = mrshop.store.get("carList") || [];
+                    let car = carList.find(car => car.skuId == this.sku.id);
+
+                    if(car){
+                        if(this.num < this.sku.stock){
+                            car.num += this.num;
+                        }
+                    }else{
+                        car = {
+                            skuId:this.sku.id,
+                            title:this.sku.title,
+                            image:this.sku.images.length > 0 ? this.images[0] : '',
+                            price:this.sku.price,
+                            num:this.num,
+                            ownSpec:JSON.stringify(this.ownSpec)
+                        };
+                        carList.push(car);
+                    }
+                    mrshop.store.set("carList",carList);
+                    window.location.href = '../success-cart.html';
+                });
             },
             ownSpec () {
                 //获取当前商品特殊规格数据(4:机身颜色....)

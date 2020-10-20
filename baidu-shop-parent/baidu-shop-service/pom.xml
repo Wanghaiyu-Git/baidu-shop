@@ -18,6 +18,7 @@
         <module>baidu-shop-service-search</module>
         <module>baidu-shop-service-template</module>
         <module>baidu-shop-service-user</module>
+        <module>baidu-shop-service-car</module>
     </modules>
 
     <dependencies>

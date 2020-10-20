@@ -1,13 +1,12 @@
 package com.baidu.filter;
 
-import com.baidu.config.JwtConfig;
+import com.baidu.shop.config.JwtConfig;
 import com.baidu.shop.utils.CookieUtils;
 import com.baidu.shop.utils.JwtUtils;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
 import org.apache.http.HttpStatus;
-import org.elasticsearch.http.HttpStats;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
