@@ -19,6 +19,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +42,50 @@ public class CarServiceImpl extends BaseApiService implements CarService {
 
     @Autowired
     private GoodsFeign goodsFeign;
+
+    @Override
+    public Result<JSONObject> carNumUpdate(Long skuId, Integer type, String token) {
+
+        //获取当前登录用户
+        try {
+            UserInfo userInfo = JwtUtils.getInfoFromToken(token, jwtConfig.getPublicKey());
+
+            CarDTO car = redisRepository.getHash(MRshopConstant.USER_GOODS_CAR_PRE + userInfo.getId(), skuId + "", CarDTO.class);
+
+            if(car != null){
+                if(type == 1){
+                    car.setNum(car.getNum() + 1);
+                }else{
+                    car.setNum(car.getNum() - 1);
+                }
+                redisRepository.setHash(MRshopConstant.USER_GOODS_CAR_PRE + userInfo.getId(), car.getSkuId() + "", JSONUtil.toJsonString(car));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return this.setResultSuccess();
+    }
+
+    @Override
+    public Result<List<CarDTO>> carCurrentUserGoodsCar(String token) {
+
+        //获取当前登录用户信息
+        try {
+            List<CarDTO> carDTOS = new ArrayList<>();
+            UserInfo userInfo = JwtUtils.getInfoFromToken(token, jwtConfig.getPublicKey());
+            Map<String, String> goodsCarMap = redisRepository.getHash(MRshopConstant.USER_GOODS_CAR_PRE + userInfo.getId());
+            goodsCarMap.forEach((key,value) -> {
+                CarDTO carDTO = JSONUtil.toBean(value, CarDTO.class);
+                carDTOS.add(carDTO);
+            });
+            return this.setResultSuccess(carDTOS);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return this.setResultError("内部错误");
+    }
 
     @Override
     public Result<JSONObject> mergeCar(String clientCarList, String token) {
@@ -85,9 +130,6 @@ public class CarServiceImpl extends BaseApiService implements CarService {
                     SkuEntity skuEntity = skuResult.getData();
                     carDTO.setTitle(skuEntity.getTitle());
                     carDTO.setImage(StringUtil.isEmpty(skuEntity.getImages()) ? skuEntity.getImages().split(",")[0] : "");
-
-                    Map<String, Object> stringObjectMap = JSONUtil.toMap(skuEntity.getOwnSpec());
-
                     carDTO.setOwnSpec(skuEntity.getOwnSpec());
                     carDTO.setPrice(Long.valueOf(skuEntity.getPrice()));
                     carDTO.setUserId(userInfo.getId());
@@ -96,7 +138,6 @@ public class CarServiceImpl extends BaseApiService implements CarService {
                             carDTO.getSkuId() + "", JSONUtil.toJsonString(carDTO));
 
                     saveCar = carDTO;
-
                     log.debug("新增商品到购物车redis, KEY:{}, skuId:{}, car:{}",
                             MRshopConstant.USER_PHONE_CODE_PRE + userInfo.getId(), carDTO.getSkuId(), JSONUtil.toJsonString(carDTO));
                 }
@@ -109,9 +150,6 @@ public class CarServiceImpl extends BaseApiService implements CarService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-
         return this.setResultSuccess();
     }
 }

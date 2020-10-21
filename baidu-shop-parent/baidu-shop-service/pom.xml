@@ -19,6 +19,7 @@
         <module>baidu-shop-service-template</module>
         <module>baidu-shop-service-user</module>
         <module>baidu-shop-service-car</module>
+        <module>baidu-shop-service-order</module>
     </modules>
 
     <dependencies>

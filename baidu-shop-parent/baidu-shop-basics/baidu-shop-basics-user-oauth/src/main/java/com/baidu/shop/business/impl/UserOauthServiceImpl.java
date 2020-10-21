@@ -48,7 +48,7 @@ public class UserOauthServiceImpl extends BaseApiService implements UserOauthSer
             UserEntity entity = list.get(0);
             if (BCryptUtil.checkpw(userEntity.getPassword(),entity.getPassword())){
                 try {
-                    token = JwtUtils.generateToken(new UserInfo(userEntity.getId(),entity.getUsername())
+                    token = JwtUtils.generateToken(new UserInfo(entity.getId(),entity.getUsername())
                             ,jwtConfig.getPrivateKey(),jwtConfig.getExpire());
                 } catch (Exception e) {
                     e.printStackTrace();
