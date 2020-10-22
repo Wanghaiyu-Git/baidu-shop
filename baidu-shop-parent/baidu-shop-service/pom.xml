@@ -20,6 +20,7 @@
         <module>baidu-shop-service-user</module>
         <module>baidu-shop-service-car</module>
         <module>baidu-shop-service-order</module>
+        <module>baidu-shop-service-pay</module>
     </modules>
 
     <dependencies>
