@@ -21,6 +21,7 @@ import com.baidu.shop.utils.JSONUtil;
 import com.baidu.shop.utils.StringUtil;
 import com.google.common.math.DoubleMath;
 import com.google.gson.JsonObject;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.math.NumberUtils;
 import com.github.pagehelper.PageInfo;
 import com.netflix.discovery.converters.Auto;
@@ -53,6 +54,7 @@ import java.util.stream.Collectors;
  * @Version V1.0
  **/
 @RestController
+@Slf4j
 public class ShopElasticsearchServiceImpl extends BaseApiService implements ShopElasticsearchService {
 
     @Autowired
@@ -123,8 +125,6 @@ public class ShopElasticsearchServiceImpl extends BaseApiService implements Shop
         }
 
         Map<String, List<String>> specParamValueMap = this.getSpecParam(hotCid, search);
-
-
         return new GoodsResponse(total, totalPage, brandList, categoryList, goodsList,specParamValueMap);
     }
 
@@ -153,6 +153,7 @@ public class ShopElasticsearchServiceImpl extends BaseApiService implements Shop
         //批量新增数据
         List<GoodsDoc> goodsDocs = this.esGoodsInfo(new SpuDTO());
         elasticsearchRestTemplate.save(goodsDocs);
+
         return this.setResultSuccess();
     }
 
@@ -191,6 +192,7 @@ public class ShopElasticsearchServiceImpl extends BaseApiService implements Shop
         searchQueryBuilder.withPageable(PageRequest.of(page-1,10));//分页
 
         searchQueryBuilder.withHighlightBuilder(ESHighLightUtil.getHighlightBuilder("title"));//设置高亮
+        log.debug(search);
         return searchQueryBuilder;
     }
 
@@ -292,6 +294,7 @@ public class ShopElasticsearchServiceImpl extends BaseApiService implements Shop
 
             return map;
         }
+        log.debug(search);
         return null;
     }
 

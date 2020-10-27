@@ -42,3 +42,9 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
+
+#日志设置
+logging:
+  level:
+    # 打印与我们程序相关的日志信息
+    com.baidu.shop: debug

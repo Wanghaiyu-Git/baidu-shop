@@ -51,7 +51,7 @@ hystrix:
       execution:
         isolation:
           thread:
-            timeoutInMilliseconds: 10000 # 熔断超时时长：6000ms
+            timeoutInMilliseconds: 70000 # 熔断超时时长：6000ms
 
 eureka:
   client:
@@ -61,7 +61,7 @@ eureka:
 baidushop:
   #声明不进行拦截的请求用,分隔
   filter:
-    excludes: /api/oauth/oauth/login,/api/user-center/user/register,/api/search/es/search,/api/user-center/user/check
+    excludes: /api/oauth/oauth/login,/api/user-center/user/register,/api/search/es/search,/api/user-center/user/check,/api/manage/category/list
   jwt:
     pubKeyPath: E:\rea\rea.pub # 公钥地址(私钥加密,公钥解密)
     cookieName: MRSHOP_TOKEN

@@ -38,5 +38,4 @@ public interface CarService {
     @GetMapping(value = "car/carCurrentUserGoodsCar")
     Result<List<CarDTO>> carCurrentUserGoodsCar(@CookieValue(value = "MRSHOP_TOKEN") String token);
 
-
 }

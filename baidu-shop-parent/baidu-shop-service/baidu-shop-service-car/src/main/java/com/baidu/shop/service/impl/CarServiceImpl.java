@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -129,7 +130,7 @@ public class CarServiceImpl extends BaseApiService implements CarService {
 
                     SkuEntity skuEntity = skuResult.getData();
                     carDTO.setTitle(skuEntity.getTitle());
-                    carDTO.setImage(StringUtil.isEmpty(skuEntity.getImages()) ? skuEntity.getImages().split(",")[0] : "");
+                    carDTO.setImage(StringUtil.isEmpty(skuEntity.getImages()) ? "" : skuEntity.getImages().split(",")[0]);
                     carDTO.setOwnSpec(skuEntity.getOwnSpec());
                     carDTO.setPrice(Long.valueOf(skuEntity.getPrice()));
                     carDTO.setUserId(userInfo.getId());
