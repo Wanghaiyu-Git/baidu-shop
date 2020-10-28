@@ -21,6 +21,7 @@
         <module>baidu-shop-service-api-car</module>
         <module>baidu-shop-service-api-order</module>
         <module>baidu-shop-service-api-pay</module>
+        <module>baidu-shop-service-api-lunbo</module>
     </modules>
 
     <dependencies>

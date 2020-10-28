@@ -24,7 +24,9 @@ import java.util.List;
 @Api(tags = "ES接口")
 public interface ShopElasticsearchService {
 
-
+//    @ApiOperation(value = "获取热度最高的商品")
+//    @GetMapping(value = "es/hotGoods")
+//    Result<JSONObject> hotGoods();
 
     @ApiOperation(value = "清空ES中的商品数据")
     @GetMapping(value = "es/clearGoodsEsData")

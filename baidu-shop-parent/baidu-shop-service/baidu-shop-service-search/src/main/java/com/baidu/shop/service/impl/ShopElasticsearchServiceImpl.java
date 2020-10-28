@@ -5,7 +5,6 @@ import com.baidu.shop.base.BaseApiService;
 import com.baidu.shop.base.Result;
 import com.baidu.shop.document.GoodsDoc;
 import com.baidu.shop.dto.SkuDTO;
-import com.baidu.shop.dto.SpecGroupDTO;
 import com.baidu.shop.dto.SpecParamDTO;
 import com.baidu.shop.dto.SpuDTO;
 import com.baidu.shop.entity.*;
@@ -19,16 +18,12 @@ import com.baidu.shop.status.HTTPStatus;
 import com.baidu.shop.utils.ESHighLightUtil;
 import com.baidu.shop.utils.JSONUtil;
 import com.baidu.shop.utils.StringUtil;
-import com.google.common.math.DoubleMath;
 import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.math.NumberUtils;
-import com.github.pagehelper.PageInfo;
-import com.netflix.discovery.converters.Auto;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.Aggregations;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
@@ -38,9 +33,7 @@ import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.IndexOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
-import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
-import org.springframework.web.bind.EscapedErrors;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
@@ -71,6 +64,21 @@ public class ShopElasticsearchServiceImpl extends BaseApiService implements Shop
 
     @Autowired
     private BrandFeign brandFeign;
+
+
+//    @Override
+//    public Result<JSONObject> hotGoods() {
+//
+//        String hotBrandName = "华为";
+//        String hotCategoryName = "手机";
+//        DailyRecommendationEntity dailyRecommendationEntity = new DailyRecommendationEntity();
+//        dailyRecommendationEntity.setBrandName(hotBrandName);
+//        dailyRecommendationEntity.setCategoryName(hotCategoryName) ;
+//        NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder();
+//        searchQueryBuilder.withQuery(QueryBuilders.multiMatchQuery("brandName","categoryName"));
+//
+//        return null;
+//    }
 
     @Override
     public Result<JsonObject> saveData(Integer spuId) {
@@ -210,7 +218,6 @@ public class ShopElasticsearchServiceImpl extends BaseApiService implements Shop
         List<Integer> hotCid = Arrays.asList(0);
         List<Long> maxCount = Arrays.asList(0L);
         Map<Integer, List<CategoryEntity>> map = new HashMap<>();
-
 
         //通过id集合查询数据
         List<String> cidList = cid_agg.getBuckets().stream().map(cidbucket -> {
