@@ -23,6 +23,14 @@
             <artifactId>baidu-shop-common-oauth</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.baidu</groupId>
+            <artifactId>baidu-shop-service-log</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+
     </dependencies>
 
 

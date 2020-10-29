@@ -16,10 +16,10 @@ import tk.mybatis.spring.annotation.MapperScan;
  * @Version V1.0
  **/
 //不加载自带的数据源配置
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
+@SpringBootApplication
 @EnableEurekaClient
 @EnableFeignClients
-@MapperScan(value = "com.baidu.shop.mapper")
+@MapperScan(value = "com.baidu")
 public class RunSearcherServerApplication {
 
     public static void main(String[] args) {

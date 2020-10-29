@@ -10,6 +10,7 @@
         <module name="baidu-shop-service-api-template" />
         <module name="baidu-shop-service-car" />
         <module name="baidu-shop-service-template" />
+        <module name="baidu-shop-service-api-user" />
         <module name="baidu-shop-service-api-order" />
         <module name="baidu-shop-service-xxx" />
         <module name="baidu-shop-service-pay" />
@@ -22,15 +23,18 @@
         <module name="baidu-shop-basic-upload-server" />
         <module name="baidu-shop-basic-eureka-server" />
         <module name="baidu-shop-service-api-car" />
-        <module name="baidu-shop-service-api-user" />
+        <module name="baidu-shop-service-lunbo" />
         <module name="baidu-shop-service-api-xxx" />
         <module name="baidu-shop-service-api-pay" />
         <module name="baidu-shop-common-oauth" />
+        <module name="baidu-shop-service-log" />
         <module name="baidu-shop-service-search" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="baidu-shop-commons-oauth" target="1.8" />
+      <module name="baidu-shop-service-api-lunbo" target="1.8" />
+      <module name="baidu-shop-service-lunbo" target="1.8" />
       <module name="rabbitmqDemo" target="1.5" />
     </bytecodeTargetLevel>
   </component>
@@ -48,6 +52,7 @@
       <module name="baidu-shop-service" options="-parameters" />
       <module name="baidu-shop-service-api" options="-parameters" />
       <module name="baidu-shop-service-api-car" options="-parameters" />
+      <module name="baidu-shop-service-api-lunbo" options="-parameters" />
       <module name="baidu-shop-service-api-order" options="-parameters" />
       <module name="baidu-shop-service-api-pay" options="-parameters" />
       <module name="baidu-shop-service-api-search" options="-parameters" />
@@ -55,6 +60,8 @@
       <module name="baidu-shop-service-api-user" options="-parameters" />
       <module name="baidu-shop-service-api-xxx" options="-parameters" />
       <module name="baidu-shop-service-car" options="-parameters" />
+      <module name="baidu-shop-service-log" options="-parameters" />
+      <module name="baidu-shop-service-lunbo" options="-parameters" />
       <module name="baidu-shop-service-order" options="-parameters" />
       <module name="baidu-shop-service-pay" options="-parameters" />
       <module name="baidu-shop-service-search" options="-parameters" />

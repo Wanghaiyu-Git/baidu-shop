@@ -1,6 +1,7 @@
 package com.baidu.shop.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baidu.aop.annotation.Log;
 import com.baidu.shop.base.BaseApiService;
 import com.baidu.shop.base.Result;
 import com.baidu.shop.document.GoodsDoc;
@@ -106,6 +107,7 @@ public class ShopElasticsearchServiceImpl extends BaseApiService implements Shop
      * @param page
      * @return
      */
+    @Log(operModul = "搜索模块",operType = "搜索",operDesc = "搜索商品")
     @Override
     public GoodsResponse search(String search,Integer page,String filter) {
         if(StringUtil.isEmpty(search)) throw new RuntimeException("查询内容不能为空");//判断搜索内容不能为空

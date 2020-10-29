@@ -1,33 +1,11 @@
 server:
-  port: 8700
+  port: 9000
 
 spring:
-#  main: allow-bean-definition-overriding=true
-  main:
-    allow-bean-definition-overriding: true
+#  aop:
+#    auto: true   #加上以来之后默认是true
   application:
-    name: car-server
-    # 整合redis配置
-  redis:
-    # 数据库标识，可以配置多个redis使用不同的标识区分
-    database: 0
-    # redisIP地址
-    host: 119.45.207.135
-    # redis端口号
-    port: 6379
-    # redis密码
-    password: 123456
-    # redis连接池的配置
-    jedis:
-      pool:
-        #最大连接数据库连接数,设 0 为没有限制
-        max-active: 8
-        #最大等待连接中的数量,设 0 为没有限制
-        max-idle: 8
-        #最大建立连接等待时间。如果超过此时间将接到异常。设为-1表示无限制。
-        max-wait: -1ms
-        #最小等待连接中的数量,设 0 为没有限制
-        min-idle: 0
+    name: log-server
   # 配置数据源
   datasource:
     # 数据源名称，任意
@@ -56,11 +34,16 @@ spring:
       validation-timeout: 5000
       # 设置连接在连接池中的存货时间 如果不等于0且小于30秒则会被重置回30分钟
       max-lifetime: 1800000
+
+# 通用mapper
+mapper:
+  mappers: tk.mybatis.mapper.common.Mapper
+  identity: MYSQL
 #日志设置
 logging:
   level:
     # 打印与我们程序相关的日志信息
-    com.baidu.shop: debug
+    com.baidu: debug
 # eureka配置
 eureka:
   client:
@@ -69,5 +52,9 @@ eureka:
 
 baidushop:
   jwt:
-    pubKeyPath: E:\rea\rea.pub # 公钥地址
-    cookieName: MRSHOP_TOKEN # cookie的名称
+    secret: why # 登录校验的密钥
+    pubKeyPath: E:\rea\rea.pub # 公钥地址,理论上应该有对应linux的地址
+    priKeyPath: E:\rea\rea.pri # 私钥地址
+    expire: 30 # tocken有效时间,单位分钟
+    cookieName: MRSHOP_TOKEN #cookie名称
+    cookieMaxAge: 1800 #cookie有效时间，单位为秒

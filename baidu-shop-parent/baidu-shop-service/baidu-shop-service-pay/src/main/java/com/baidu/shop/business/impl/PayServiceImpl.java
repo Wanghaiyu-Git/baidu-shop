@@ -5,6 +5,7 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradePagePayRequest;
+import com.baidu.aop.annotation.Log;
 import com.baidu.shop.base.BaseApiService;
 import com.baidu.shop.base.Result;
 import com.baidu.shop.business.PayService;
@@ -105,6 +106,7 @@ public class PayServiceImpl extends BaseApiService implements PayService {
      * 接收支付宝通知
      * @param httpServletRequest
      */
+    @Log(operModul = "支付模块",operType = "支付",operDesc = "接收支付宝通知")
     @Override
     public void returnNotify(HttpServletRequest httpServletRequest) {
 
@@ -190,6 +192,7 @@ public class PayServiceImpl extends BaseApiService implements PayService {
      * @param payInfoDTO
      * @param httpServletResponse
      */
+    @Log(operModul = "支付模块",operType = "支付",operDesc = "提交订单")
     @Override
     public void requestPay(PayInfoDTO payInfoDTO, HttpServletResponse httpServletResponse) {
 

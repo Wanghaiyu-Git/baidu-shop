@@ -1,5 +1,6 @@
 package com.baidu.shop.service.impl;
 
+import com.baidu.aop.annotation.Log;
 import com.baidu.shop.config.JwtConfig;
 import com.baidu.shop.base.BaseApiService;
 import com.baidu.shop.base.Result;
@@ -103,9 +104,15 @@ public class CarServiceImpl extends BaseApiService implements CarService {
         return this.setResultSuccess();
     }
 
+    /**
+     * 新增购物车
+     * @param carDTO
+     * @param token
+     * @return
+     */
+    @Log(operModul = "购物车模块",operType = "增加",operDesc = "增加商品到购物车")
     @Override
     public Result<JSONObject> addCar(CarDTO carDTO, String token) {
-
         try {
             UserInfo userInfo = JwtUtils.getInfoFromToken(token, jwtConfig.getPublicKey());
 

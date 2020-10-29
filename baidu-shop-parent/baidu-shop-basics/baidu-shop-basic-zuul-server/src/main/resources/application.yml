@@ -18,6 +18,7 @@ zuul:
     car-server: /car/**
     order-server: /order/**
     pay-server: /pay/**
+    log-server: /log/**
 
 #  routes:
 #    # 路由名称
@@ -61,7 +62,7 @@ eureka:
 baidushop:
   #声明不进行拦截的请求用,分隔
   filter:
-    excludes: /api/oauth/oauth/login,/api/user-center/user/register,/api/search/es/search,/api/user-center/user/check,/api/manage/category/list,/api/manage/gundongtu/gundongtuInfo,/api/manage/gundongtu/addGundongtu,/api/manage/gundongtu/deleteGundongtu,/api/manage/get/lunboById,/api/manage/gundongtu/updateGundongtu,/api/oauth/oauth/verify
+    excludes: /api/oauth/oauth/login,/api/user-center/user/register,/api/search/es/search,/api/user-center/user/check,/api/manage/category/list,/api/manage/gundongtu/gundongtuInfo,/api/manage/gundongtu/addGundongtu,/api/manage/gundongtu/deleteGundongtu,/api/manage/get/lunboById,/api/manage/gundongtu/updateGundongtu,/api/oauth/oauth/verify,/api/manage/brand/getBrandInfo,/api/manage/brand/save,/api/manage/brand/delete,/api/manage/category/getBrand,/api/manage/brand/update
   jwt:
     pubKeyPath: E:\rea\rea.pub # 公钥地址(私钥加密,公钥解密)
     cookieName: MRSHOP_TOKEN

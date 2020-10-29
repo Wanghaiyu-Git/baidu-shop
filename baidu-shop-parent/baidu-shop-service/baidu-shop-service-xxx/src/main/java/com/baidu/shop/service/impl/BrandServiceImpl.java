@@ -1,6 +1,7 @@
 package com.baidu.shop.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baidu.aop.annotation.Log;
 import com.baidu.shop.base.BaseApiService;
 import com.baidu.shop.base.Result;
 import com.baidu.shop.dto.BrandDTO;
@@ -88,6 +89,7 @@ public class BrandServiceImpl extends BaseApiService implements BrandService {
         return this.setResultSuccess(pageInfo);
     }
 
+    @Log(operModul = "xxx模块",operType = "增加",operDesc = "增加品牌")
     @Transactional
     @Override
     public Result<JsonObject> saveBrand(BrandDTO brandDTO) {
@@ -156,6 +158,7 @@ public class BrandServiceImpl extends BaseApiService implements BrandService {
         return this.setResultSuccess();
     }
 
+    @Log(operModul = "xxx模块",operType = "修改",operDesc = "修改品牌")
     @Override
     @Transactional
     public Result<JSONObject> update(BrandDTO brandDTO) {
@@ -173,6 +176,7 @@ public class BrandServiceImpl extends BaseApiService implements BrandService {
         return this.setResultSuccess();
     }
 
+    @Log(operModul = "xxx模块",operType = "删除",operDesc = "删除品牌")
     @Transactional
     @Override
     public Result<JSONObject> deleteBrand(Integer id) {

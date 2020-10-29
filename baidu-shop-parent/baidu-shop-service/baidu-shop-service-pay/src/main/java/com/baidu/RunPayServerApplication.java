@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import tk.mybatis.spring.annotation.MapperScan;
 
 /**
  * @ClassName RunPayServerApplication
@@ -13,7 +14,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * @Date 2020/10/22
  * @Version V1.0
  **/
-@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
+@SpringBootApplication
 @EnableEurekaClient
 @EnableFeignClients
 public class RunPayServerApplication {

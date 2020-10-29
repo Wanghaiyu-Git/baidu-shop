@@ -10,6 +10,7 @@
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/baidu-shop-commoms/baidu-shop-commons-oauth/pom.xml" />
+        <option value="$PROJECT_DIR$/baidu-shop-service-api/baidu-shop-service-api-lunbo/pom.xml" />
       </set>
     </option>
   </component>
