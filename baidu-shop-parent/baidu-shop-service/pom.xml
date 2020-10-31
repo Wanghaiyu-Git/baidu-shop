@@ -23,6 +23,7 @@
         <module>baidu-shop-service-pay</module>
         <module>baidu-shop-service-log</module>
         <module>baidu-shop-service-recommend</module>
+        <module>baidu-shop-service-miaosha</module>
     </modules>
 
     <dependencies>

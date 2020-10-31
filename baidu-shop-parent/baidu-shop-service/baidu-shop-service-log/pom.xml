@@ -12,6 +12,7 @@
     <artifactId>baidu-shop-service-log</artifactId>
 
     <dependencies>
+
         <!-- aop依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -23,7 +24,6 @@
             <artifactId>baidu-shop-basics-user-oauth</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-
 
     </dependencies>
 

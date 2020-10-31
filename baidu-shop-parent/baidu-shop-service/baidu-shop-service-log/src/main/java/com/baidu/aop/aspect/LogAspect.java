@@ -80,16 +80,16 @@ public class LogAspect {
         logEntity.setIp(IPUtils.getIpAddr(request));//用户登陆的ip
         logEntity.setUrl(request.getRequestURI());//访问的方法
 
+        //验证用户是否是登录状态
         String cookieValue = CookieUtils.getCookieValue(request, jwtConfig.getCookieName());
         if (null != cookieValue) {
             try {
                 UserInfo userInfo = JwtUtils.getInfoFromToken(cookieValue, jwtConfig.getPublicKey());
-                logEntity.setUsername(userInfo.getUsername());
+                logEntity.setUsername(userInfo.getUsername());//获取用户登录名
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-
         logMapper.insertSelective(logEntity);
     }
 }

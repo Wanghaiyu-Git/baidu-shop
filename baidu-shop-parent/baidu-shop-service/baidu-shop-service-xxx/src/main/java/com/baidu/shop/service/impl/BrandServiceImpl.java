@@ -94,7 +94,6 @@ public class BrandServiceImpl extends BaseApiService implements BrandService {
     @Override
     public Result<JsonObject> saveBrand(BrandDTO brandDTO) {
 
-
         BrandEntity brandEntity = BaiDuBeanUtil.copyProperties(brandDTO, BrandEntity.class);
         //新增品牌返回主键
 //        //获得品牌名称
